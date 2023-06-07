@@ -6,12 +6,15 @@
 #define e 2.71828182845904
 #define norm 0.000000001
 
+int main(){
+  return 0;
+}
+int s21_abs(int x);
 long double s21_nan();
 double s21_pow(double x, double y);
 long double s21_sqrt(double x);
 int s21_fact(int x);
 double s21_deg_to_rad(int deg);
-int s21_abs(int x);
 long double s21_fabs(double x);
 long double s21_sin(double x);
 long double s21_cos(double x);
@@ -25,14 +28,6 @@ long double s21_exp(double x);
 long double s21_log(double x);
 long double s21_fmod(double x, double y);
 
-int main() {
-  double x;
-  printf("Введите число: ");
-  scanf("%lf", &x);
-  printf("%Lf\n", s21_exp(x));
-  printf("%f", exp(x));
-  return 0;
-}
 
 long double s21_nan() {
   double zero = 0.0;
@@ -44,17 +39,6 @@ double s21_pow(double base, double exp1) {
   double res = s21_exp(exp1 * s21_log(base));
   return res;
 }
-
-// double s21_pow(double x, double y) {
-//   double digit = x;
-//   double st = y;
-//   double temp = x;
-
-//   for (int i = 1; i < st; i++) {
-//     temp = temp * digit;
-//   }
-//   return temp;
-// }
 
 long double s21_sqrt(double x) {
   double res = x;
