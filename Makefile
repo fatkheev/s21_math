@@ -1,26 +1,72 @@
-GCC=gcc -Wall -Werror -Wextra
+GC=gcc
+CFLAGS=-Wall -Wextra -Werror -std=c11
+OB=s21_test
+LIB=s21_math
+GCOV=--coverage
 
+all : test
 
-all: s21_math
+rebuild : clean all
 
-s21_math: s21_math.o
-	$(GCC) s21_math.o -o s21_math
+test: $(LIB).a
+	$(GC)  $(CFLAGS) -c $(OB).c
+	$(GC) $(CFLAGS) $(OB).o -l check -L. $(LIB).a -o test
+	./test
 
-s21_math.o: s21_math.c
-	$(GCC) -c s21_math.c -o s21_math.o
+gcov_report : clean lcov $(OB).gcov g$(LIB).a 
+	$(GC) $(GCOV) $(OB).o -l check -L. $(LIB).a  -o gcov
+	./gcov
+	gcov s21_math.c
+	/opt/goinfre/*/homebrew/bin/lcov -t "test" -o test.info -c -d .
+	/opt/goinfre/*/homebrew/bin/genhtml -o report test.info
+	open report/index.html
 
-test: s21_math test_func_cat.sh
-	sh test_func_cat.sh
+	
+$(LIB).a : $(LIB).c
+	$(GC) -c $(LIB).c 
+	ar rc  $(LIB).a $(LIB).o 
+	ranlib $(LIB).a  #
+# библиотека для теста
 
-valgrind: 
-	CK_FORK=no valgrind --trace-children=yes --track-fds=yes --track-origins=yes --leak-check=full --show-leak-kinds=all --verbose --log-file=RESULT.txt ./s21_math -i test1.txt
-	cat RESULT.txt
-	rm -rf RESULT.txt
+g$(LIB).a : $(LIB).c
+	$(GC) $(GCOV) -c $(LIB).c 
+	ar rc  $(LIB).a $(LIB).o 
+	ranlib $(LIB).a
+# библиотека для отчета
 
-rebuild: clean all
-
-clean:
+clean :
 	rm -rf *.o
 	rm -rf *.a
-	rm -rf *.out
-	rm -rf s21_math
+	rm -rf *.g*
+	rm -rf report
+	rm -rf test.info
+
+lcov:
+ifeq ("", "$(wildcard /opt/goinfre/*/homebrew/bin/lcov)")
+	$(error Need to install lcov)
+# (\_/)
+# (*.*)
+# />100%
+endif
+
+
+
+# lcov_instal :
+# 	cd /opt/goinfre/
+# 	git clone https://github.com/Homebrew/brew homebrew
+# 	cd ${HOME}/goinfre/homebrew/bin
+# 	USERNAME=$(whoami)
+# 	echo $(USERNAME)
+# 	eval "$(/opt/goinfre/USERNAME/homebrew/bin/brew shellenv)"
+# 	brew update --force --quiet
+# 	chmod -R go-w "$(brew --prefix)/share/zsh"
+# 	brew install lcov 
+# Лан, забей, сам установишь
+
+
+f : $(LIB).a f.o 
+	$(GC) f.o -L. $(LIB).a -o f
+	make clean
+
+f.o : f.c
+	$(GC) $(CFLAGS) -c f.c
