@@ -5,16 +5,14 @@
 #define pi 3.141592653589793238462643
 #define e 2.71828182845904
 #define norm 0.000000001
+#define EPS 1e-17
 
-int main(){
-  return 0;
-}
-int s21_abs(int x);
 long double s21_nan();
 double s21_pow(double x, double y);
 long double s21_sqrt(double x);
 int s21_fact(int x);
 double s21_deg_to_rad(int deg);
+int s21_abs(int x);
 long double s21_fabs(double x);
 long double s21_sin(double x);
 long double s21_cos(double x);
@@ -28,23 +26,35 @@ long double s21_exp(double x);
 long double s21_log(double x);
 long double s21_fmod(double x, double y);
 
+int main() {
+  double x;
+  printf("Введите число: ");
+  scanf("%lf", &x);
+  printf("%.15Lf\n", s21_log(x));
+  printf("%.15f", log(x));
+  return 0;
+}
 
 long double s21_nan() {
   double zero = 0.0;
   return zero / zero;
 }
 
-double s21_pow(double base, double exp1) {
+double s21_pow(double base, double exp) {
   // x^y = exp(y * ln(x))
-  double res = s21_exp(exp1 * s21_log(base));
+  double res = s21_exp(exp * s21_log(base));
   return res;
 }
 
 long double s21_sqrt(double x) {
   double res = x;
 
-  while (s21_fabs((res * res - x)) > norm) {
-    res = (res + x / res) / 2;
+  if (x < 0) {
+    res = s21_nan();
+  } else {
+    while (s21_fabs((res * res - x)) > norm) {
+      res = (res + x / res) / 2;
+    }
   }
 
   return res;
@@ -184,7 +194,7 @@ long double s21_exp(double x) {
   long double res = 1.0;
   long double term = 1.0;
 
-  for (int i = 1; i <= 200; i++) {
+  for (int i = 1; i <= 300; i++) {
     term = term * (x / i);
     res = res + term;
   }
@@ -198,7 +208,7 @@ long double s21_log(double x) {
   double add = y;
   double res = y;
 
-  for (int i = 1; i < 25; i++) {
+  for (int i = 1; i < 10000; i++) {
     add = y;
     st = st + 2;
     for (int j = 1; j < st; j++) {
