@@ -1,5 +1,9 @@
-#ifndef S21_NATH
+#ifndef S21_MATH
 #define S21_MATH
+
+#include <float.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define pi 3.141592653589793238462643
 #define e 2.71828182845904

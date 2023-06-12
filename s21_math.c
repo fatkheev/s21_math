@@ -1,14 +1,6 @@
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include"s21_math.h"
 
-#define pi 3.141592653589793238462643
-#define e 2.71828182845904
-#define norm 0.000000001
 
-int main(){
-  return 0;
-}
 int s21_abs(int x);
 long double s21_nan();
 double s21_pow(double x, double y);

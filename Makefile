@@ -1,72 +1,27 @@
-GC=gcc
-CFLAGS=-Wall -Wextra -Werror -std=c11
-OB=s21_test
-LIB=s21_math
-GCOV=--coverage
+FLAGS = -Wall -Werror -Wextra -std=c11
+FUNC = s21_math.c
+FUNC_LIB = s21_math.o
 
-all : test
+all:  test gcov_report
 
-rebuild : clean all
+s21_math.o:
+	gcc $(FLAGS) -c s21_math.c
 
-test: $(LIB).a
-	$(GC)  $(CFLAGS) -c $(OB).c
-	$(GC) $(CFLAGS) $(OB).o -l check -L. $(LIB).a -o test
+s21_math.a: s21_math.o
+	ar rc s21_math.a s21_math.o
+	ranlib s21_math.a
+
+test: clean s21_math.a 
+	gcc $(FLAGS) -fprofile-arcs -ftest-coverage -o test s21_math.c s21_test.c -lcheck -lm -lpthread
 	./test
 
-gcov_report : clean lcov $(OB).gcov g$(LIB).a 
-	$(GC) $(GCOV) $(OB).o -l check -L. $(LIB).a  -o gcov
-	./gcov
-	gcov s21_math.c
-	/opt/goinfre/*/homebrew/bin/lcov -t "test" -o test.info -c -d .
-	/opt/goinfre/*/homebrew/bin/genhtml -o report test.info
-	open report/index.html
+gcov_report: s21_math.a
+	gcov s21_test.c
+	lcov --capture --directory . --output-file coverage.info
+	genhtml coverage.info --output-directory out
+	open out/index.html
 
-	
-$(LIB).a : $(LIB).c
-	$(GC) -c $(LIB).c 
-	ar rc  $(LIB).a $(LIB).o 
-	ranlib $(LIB).a  #
-# библиотека для теста
+clean:
+	rm -rf *.o out *.info *.gcda *.gcno *.gcov *.gch *.out *.a test
 
-g$(LIB).a : $(LIB).c
-	$(GC) $(GCOV) -c $(LIB).c 
-	ar rc  $(LIB).a $(LIB).o 
-	ranlib $(LIB).a
-# библиотека для отчета
-
-clean :
-	rm -rf *.o
-	rm -rf *.a
-	rm -rf *.g*
-	rm -rf report
-	rm -rf test.info
-
-lcov:
-ifeq ("", "$(wildcard /opt/goinfre/*/homebrew/bin/lcov)")
-	$(error Need to install lcov)
-# (\_/)
-# (*.*)
-# />100%
-endif
-
-
-
-# lcov_instal :
-# 	cd /opt/goinfre/
-# 	git clone https://github.com/Homebrew/brew homebrew
-# 	cd ${HOME}/goinfre/homebrew/bin
-# 	USERNAME=$(whoami)
-# 	echo $(USERNAME)
-# 	eval "$(/opt/goinfre/USERNAME/homebrew/bin/brew shellenv)"
-# 	brew update --force --quiet
-# 	chmod -R go-w "$(brew --prefix)/share/zsh"
-# 	brew install lcov 
-# Лан, забей, сам установишь
-
-
-f : $(LIB).a f.o 
-	$(GC) f.o -L. $(LIB).a -o f
-	make clean
-
-f.o : f.c
-	$(GC) $(CFLAGS) -c f.c
+rebuild: clean all
