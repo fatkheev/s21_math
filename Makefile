@@ -24,6 +24,7 @@ html: test
 	./s21_test
 	lcov --capture --directory . --output-file coverage.info
 	genhtml coverage.info --output-directory out
+	open out/index.html
 
 valgrind: 
 	CK_FORK=no valgrind --trace-children=yes --track-fds=yes --track-origins=yes --leak-check=full --show-leak-kinds=all --verbose --log-file=RESULT.txt ./s21_math -i test1.txt
@@ -34,8 +35,12 @@ rebuild: clean all
 
 clean:
 	rm -rf s21_math
+	rm -rf s21_test
 	rm -rf test
+	rm -rf out
 	rm -rf *.o
 	rm -rf *.a
 	rm -rf *.out
-	rm -rf
+	rm -rf *.gcda
+	rm -rf *.gcno
+	rm -rf *.info

@@ -6,9 +6,11 @@
 #define e 2.71828182845904
 #define norm 0.000000001
 #define EPS 1e-17
+#define nan 0.0 / 0.0
+#define inf 1.0 / 0.0
+#define ln_2 0.69314718056
 
-long double s21_nan();
-double s21_pow(double x, double y);
+long double s21_pow(double x, double y);
 long double s21_sqrt(double x);
 int s21_fact(int x);
 double s21_deg_to_rad(int deg);
@@ -27,22 +29,22 @@ long double s21_log(double x);
 long double s21_fmod(double x, double y);
 
 int main() {
-  double x;
+  double x, y;
   printf("Введите число: ");
-  scanf("%lf", &x);
-  printf("%.15Lf\n", s21_log(x));
-  printf("%.15f", log(x));
+  scanf("%lf %lf", &x, &y);
+  printf("%.16Lf\n", s21_pow(x, y));
+  printf("%.16f", pow(x, y));
   return 0;
 }
 
-long double s21_nan() {
-  double zero = 0.0;
-  return zero / zero;
-}
-
-double s21_pow(double base, double exp) {
+long double s21_pow(double base, double exp) {
+  double res;
   // x^y = exp(y * ln(x))
-  double res = s21_exp(exp * s21_log(base));
+  if (exp >= 0) {
+    res = s21_exp(exp * s21_log(base));
+  } else {
+    res = 1.0 / s21_exp(-exp * s21_log(base));
+  }
   return res;
 }
 
@@ -50,7 +52,7 @@ long double s21_sqrt(double x) {
   double res = x;
 
   if (x < 0) {
-    res = s21_nan();
+    res = nan;
   } else {
     while (s21_fabs((res * res - x)) > norm) {
       res = (res + x / res) / 2;
@@ -161,7 +163,7 @@ long double s21_asin(double x) {
     res = s21_atan(x / s21_sqrt(1 - s21_pow(x, 2)));
 
   } else {
-    res = s21_nan();
+    res = nan;
   }
 
   return res;
@@ -203,21 +205,39 @@ long double s21_exp(double x) {
 }
 
 long double s21_log(double x) {
-  double y = (x - 1) / (x + 1);
-  int st = 1;
-  double add = y;
-  double res = y;
-
-  for (int i = 1; i < 10000; i++) {
-    add = y;
-    st = st + 2;
-    for (int j = 1; j < st; j++) {
-      add = add * y;
-    }
-    res = res + add / st;
+  if (x < EPS) {
+    return nan;
   }
+  double res;
 
-  return 2 * res;
+  // для больших чисел используем свойство ln(a*b) = ln(a) + ln(b)
+  if (x > 2) {
+    int count = 0;
+    while (x > 2) {
+      x /= 2;
+      count++;
+    }
+    res = s21_log(x) + count * ln_2;
+  } else {
+    double y = (x - 1) / (x + 1);
+    int st = 1;
+    double add = y;
+    res = y;
+
+    for (int i = 1; i < 500; i++) {
+      add = y;
+      st = st + 2;
+      for (int j = 1; j < st; j++) {
+        add = add * y;
+      }
+      res = res + add / st;
+      if (s21_fabs(add / st) < EPS) {
+        break;
+      }
+    }
+    res = res * 2;
+  }
+  return res;
 }
 
 long double s21_fmod(double x, double y) {
