@@ -35,12 +35,14 @@ START_TEST(test_s21_log) {
 END_TEST
 
 START_TEST(test_s21_pow) {
-  ck_assert_double_eq_tol(s21_pow(2, 2), pow(2, 2), epsilon);
   ck_assert_double_eq_tol(s21_pow(2, 2.25), pow(2, 2.25), epsilon);
   ck_assert_double_eq_tol(s21_pow(2.25, 2), pow(2.25, 2), epsilon);
   ck_assert_double_eq_tol(s21_pow(2.25, 2.25), pow(2.25, 2.25), epsilon);
   ck_assert_double_eq_tol(s21_pow(0.00025, 0.00012), pow(0.00025, 0.00012),
   epsilon);
+  ck_assert_double_eq_tol(s21_pow(125.8, -41), pow(125.8, -41),
+  epsilon);
+  ck_assert_double_eq_tol(s21_pow(2, 2), pow(2, 2), epsilon);
 }
 END_TEST
 
@@ -60,6 +62,7 @@ Suite *s21_math_tests_create() {
 }
 
 int main(void) {
+  printf("%.16Lf\n", s21_pow(2, 2.25));
   Suite *s21_math = s21_math_tests_create();
   SRunner *s21_math_tests_runner = srunner_create(s21_math);
 
