@@ -4,6 +4,9 @@ FUNC_LIB = s21_math.o
 
 all:  test gcov_report
 
+s21_math:
+	gcc $(FLAGS) s21_math.c
+
 s21_math.o:
 	gcc $(FLAGS) -c s21_math.c
 
