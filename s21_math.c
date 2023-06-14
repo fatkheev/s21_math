@@ -1,11 +1,11 @@
 #include "s21_math.h"
 
 int main() {
-  // double x, y;
-  // printf("Введите число: ");
-  // scanf("%lf %lf", &x, &y);
-  printf("%.16Lf\n", s21_pow(2, 2));
-  printf("%.16f", pow(2, 2));
+  double x;
+  printf("Введите число: ");
+  scanf("%lf", &x);
+  printf("%.16Lf\n", s21_exp(x));
+  printf("%.16f", exp(x));
   return 0;
 }
 
@@ -165,15 +165,20 @@ long double s21_floor(double x) {
 }
 
 long double s21_exp(double x) {
-  long double res = 1.0;
-  long double term = 1.0;
+  if (x < 100) {
+    long double res = 1.0;
+    long double term = 1.0;
 
-  for (int i = 1; i <= 300; i++) {
-    term = term * (x / i);
-    res = res + term;
+    for (int i = 1; i <= 1000; i++) {
+      term = term * (x / i);
+      res = res + term;
+    }
+
+    return res;
+  } else {
+    long double tmp = s21_exp(x / 2);
+    return tmp * tmp;
   }
-
-  return res;
 }
 
 long double s21_log(double x) {
