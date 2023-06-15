@@ -37,4 +37,3 @@ long double s21_fmod(double x, double y);
 // long double s21_asin(double x);
 // long double s21_acos(double x);
 // long double s21_ceil(double x);
-// long double s21_floor(double x);
