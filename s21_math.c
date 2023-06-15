@@ -5,8 +5,8 @@
 //   double x;
 //   printf("Введите число: ");
 //   scanf("%lf", &x);
-//   printf("%.16Lf\n", s21_floor(x));
-//   printf("%.16f", floor(x));
+//   printf("%.16Lf\n", s21_ceil(x));
+//   printf("%.16f", ceil(x));
 //   return 0;
 // }
 
@@ -196,9 +196,13 @@ long double s21_ceil(double x)
   {
     res = x;
   }
-  else
+  else if (x > 0)
   {
     res = (double)ceil_digit + 1;
+  }
+    else
+  {
+    res = (double)ceil_digit;
   }
   return res;
 }
