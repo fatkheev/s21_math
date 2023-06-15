@@ -5,7 +5,6 @@ all: s21_math
 
 s21_math: s21_math.o
 	$(GCC) s21_math.o -o s21_math
-	./s21_math
 
 s21_math.o: s21_math.c
 	$(GCC) -c s21_math.c -o s21_math.o

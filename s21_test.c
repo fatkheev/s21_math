@@ -70,6 +70,16 @@ START_TEST(exp_test) {
 }
 END_TEST
 
+START_TEST(fmod_test) {
+  ck_assert_float_eq(fmod(-12.67536, 2.5), s21_fmod(-12.67536, 2.5));
+  ck_assert_float_eq(fmod(12.67536, 2.5), s21_fmod(12.67536, 2.5));
+  ck_assert_float_eq(fmod(-1234.546373, 3.5), s21_fmod(-1234.546373, 3.5));
+  ck_assert_float_eq(fmod(54637872.56738, 2.5), s21_fmod(54637872.56738, 2.5));
+  ck_assert_float_eq(fmod(0, 3.5), s21_fmod(0, 3.5));
+  ck_assert_float_eq(fmod(4.5, 4.5), s21_fmod(4.5, 4.5));
+}
+END_TEST
+
 Suite *s21_math_tests_create() {
   Suite *s21_math = suite_create("s21_math");
 
@@ -84,6 +94,7 @@ Suite *s21_math_tests_create() {
   tcase_add_test(s21_math_tests, fact_test);
   tcase_add_test(s21_math_tests, fabs_test);
   tcase_add_test(s21_math_tests, exp_test);
+  tcase_add_test(s21_math_tests, fmod_test);
 
   return s21_math;
 }
