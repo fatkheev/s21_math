@@ -11,6 +11,7 @@
 #define S21_INF 1.0 / 0.0
 #define S21_LN_2 0.69314718056
 
+int S21_ISNAN(double x);
 long double s21_pow(double x, double y);
 long double s21_sqrt(double x);
 int s21_fact(int x);
@@ -37,4 +38,3 @@ long double s21_fmod(double x, double y);
 // long double s21_acos(double x);
 // long double s21_ceil(double x);
 // long double s21_floor(double x);
-// long double s21_fmod(double x, double y);

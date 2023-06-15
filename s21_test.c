@@ -80,6 +80,22 @@ START_TEST(fmod_test) {
 }
 END_TEST
 
+START_TEST(floor_test) {
+  ck_assert_ldouble_eq(floor(-100.97), s21_floor(-100.97));
+  ck_assert_ldouble_eq(floor(-11.2), s21_floor(-11.2));
+  ck_assert_ldouble_eq(floor(-11.8), s21_floor(-11.8));
+  ck_assert_ldouble_eq(floor(-0.1112), s21_floor(-0.1112));
+  ck_assert_ldouble_eq(floor(0), s21_floor(0));
+  ck_assert_ldouble_eq(floor(0.0), s21_floor(0.0));
+  ck_assert_ldouble_eq(floor(0.00001), s21_floor(0.00001));
+  ck_assert_ldouble_eq(floor(21.1567), s21_floor(21.1567));
+  ck_assert_ldouble_eq(floor(34.999), s21_floor(34.999));
+  ck_assert_ldouble_infinite(s21_floor(S21_INF));
+  ck_assert_ldouble_nan(s21_floor(S21_NAN));
+}
+END_TEST
+
+
 Suite *s21_math_tests_create() {
   Suite *s21_math = suite_create("s21_math");
 
@@ -95,6 +111,7 @@ Suite *s21_math_tests_create() {
   tcase_add_test(s21_math_tests, fabs_test);
   tcase_add_test(s21_math_tests, exp_test);
   tcase_add_test(s21_math_tests, fmod_test);
+  tcase_add_test(s21_math_tests, floor_test);
 
   return s21_math;
 }

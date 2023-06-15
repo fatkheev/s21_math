@@ -2,13 +2,18 @@
 
 // int main()
 // {
-//   double x, y;
+//   double x;
 //   printf("Введите число: ");
-//   scanf("%lf %lf", &x, &y);
-//   printf("%.16Lf\n", s21_fmod(x, y));
-//   printf("%.16f", fmod(x, y));
+//   scanf("%lf", &x);
+//   printf("%.16Lf\n", s21_floor(x));
+//   printf("%.16f", floor(x));
 //   return 0;
 // }
+
+int S21_ISNAN(double x)
+{
+    return x != x;
+}
 
 long double s21_pow(double base, double exp)
 {
@@ -200,10 +205,31 @@ long double s21_ceil(double x)
 
 long double s21_floor(double x)
 {
-  int ceil_digit = (int)x;
-  double res = (double)ceil_digit;
+  double res;
+  if (S21_ISNAN(x))
+  {
+    res = x;
+  }
+  else
+  {
+    int ceil_digit = (int)x;
+    if (x < 0)
+    {
+      res = (double)ceil_digit - 1;
+    }
+    else if (x == S21_INF)
+    {
+      res = S21_INF;
+    }
+    else
+    {
+      res = (double)ceil_digit;
+    }
+  }
+
   return res;
 }
+
 
 long double s21_exp(double x)
 {
@@ -293,7 +319,7 @@ long double s21_fmod(double x, double y)
   {
     res = 0;
   }
-    else if (y == 0)
+  else if (y == 0)
   {
     res = S21_NAN;
   }
