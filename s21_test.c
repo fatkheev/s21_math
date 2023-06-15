@@ -1,19 +1,16 @@
+#include "s21_math.h"
 #include <check.h>
 #include <math.h>
 #include <stdlib.h>
-
-#include "s21_math.h"
-
-#define epsilon 0.000001
 
 START_TEST(abc_test) { ck_assert_int_eq(s21_abs(-2), abs(-2)); }
 END_TEST
 
 START_TEST(sqrt_test) {
-  ck_assert_double_eq_tol(s21_sqrt(4), sqrt(4), epsilon);
-  ck_assert_double_eq_tol(s21_sqrt(5), sqrt(5), epsilon);
-  ck_assert_double_eq_tol(s21_sqrt(5.5), sqrt(5.5), epsilon);
-  ck_assert_double_eq_tol(s21_sqrt(0.0000001), sqrt(0.0000001), epsilon);
+  ck_assert_double_eq_tol(s21_sqrt(4), sqrt(4), S21_EPS_6);
+  ck_assert_double_eq_tol(s21_sqrt(5), sqrt(5), S21_EPS_6);
+  ck_assert_double_eq_tol(s21_sqrt(5.5), sqrt(5.5), S21_EPS_6);
+  ck_assert_double_eq_tol(s21_sqrt(0.0000001), sqrt(0.0000001), S21_EPS_6);
   for (double i = -100; i < 10000; i += 10) {
     ck_assert_int_eq(s21_sqrt(i), sqrt(i));
   }
@@ -22,27 +19,27 @@ END_TEST
 
 START_TEST(log_test) {
   ck_assert_double_eq(s21_log(1.1), log(1.1));
-  ck_assert_double_eq_tol(s21_log(0.01), log(0.01), epsilon);
+  ck_assert_double_eq_tol(s21_log(0.01), log(0.01), S21_EPS_6);
   for (double i = 0.01; i < 2; i = i + 0.01)
   {
-    ck_assert_double_eq_tol(s21_log(i), log(i), epsilon);
+    ck_assert_double_eq_tol(s21_log(i), log(i), S21_EPS_6);
   }
   
-  ck_assert_double_eq_tol(s21_log(1.99), log(1.99), epsilon);
-  ck_assert_double_eq_tol(s21_log(450), log(450), epsilon);
+  ck_assert_double_eq_tol(s21_log(1.99), log(1.99), S21_EPS_6);
+  ck_assert_double_eq_tol(s21_log(450), log(450), S21_EPS_6);
   ck_assert_double_nan(s21_log(-0.01));
 }
 END_TEST
 
 START_TEST(pow_test) {
-  ck_assert_double_eq_tol(s21_pow(2, 2.25), pow(2, 2.25), epsilon);
-  ck_assert_double_eq_tol(s21_pow(2.25, 2), pow(2.25, 2), epsilon);
-  ck_assert_double_eq_tol(s21_pow(2.25, 2.25), pow(2.25, 2.25), epsilon);
+  ck_assert_double_eq_tol(s21_pow(2, 2.25), pow(2, 2.25), S21_EPS_6);
+  ck_assert_double_eq_tol(s21_pow(2.25, 2), pow(2.25, 2), S21_EPS_6);
+  ck_assert_double_eq_tol(s21_pow(2.25, 2.25), pow(2.25, 2.25), S21_EPS_6);
   ck_assert_double_eq_tol(s21_pow(0.00025, 0.00012), pow(0.00025, 0.00012),
-  epsilon);
+  S21_EPS_6);
   ck_assert_double_eq_tol(s21_pow(125.8, -41), pow(125.8, -41),
-  epsilon);
-  ck_assert_double_eq_tol(s21_pow(2, 2), pow(2, 2), epsilon);
+  S21_EPS_6);
+  ck_assert_double_eq_tol(s21_pow(2, 2), pow(2, 2), S21_EPS_6);
 }
 END_TEST
 
@@ -57,16 +54,19 @@ END_TEST
 START_TEST(fabs_test)
 {
   ck_assert_double_eq(s21_fabs(-234.567), fabs(-234.567));
-  ck_assert_double_eq(s21_fabs(-inf), fabs(-inf));
-  ck_assert_double_eq(s21_fabs(inf), fabs(inf));
+  ck_assert_double_eq(s21_fabs(-S21_INF), fabs(-S21_INF));
+  ck_assert_double_eq(s21_fabs(S21_INF), fabs(S21_INF));
   ck_assert_double_eq(s21_fabs(0.0), fabs(0.0));
   ck_assert_double_eq(s21_fabs(234.567), fabs(234.567));
 }
 END_TEST
 
-START_TEST(exp_test)
-{
-  ck_assert_double_eq_tol(s21_exp(24.67), exp(24.67), epsilon);
+START_TEST(exp_test) {
+  ck_assert_ldouble_eq_tol(exp(-21.8), s21_exp(-21.8), 1e-6);
+  ck_assert_ldouble_eq_tol(exp(-5), s21_exp(-5), 1e-6);
+  ck_assert_ldouble_eq_tol(exp(0), s21_exp(0), 1e-6);
+  ck_assert_ldouble_eq_tol(exp(1), s21_exp(1), 1e-6);
+  ck_assert_ldouble_eq_tol(exp(5), s21_exp(5), 1e-6);
 }
 END_TEST
 

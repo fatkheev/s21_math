@@ -2,13 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define pi 3.141592653589793238462643
-#define e 2.71828182845904
-#define norm 0.000000001
-#define EPS 1e-17
-#define nan 0.0 / 0.0
-#define inf 1.0 / 0.0
-#define ln_2 0.69314718056
+#define S21_PI 3.141592653589793238462643
+#define S21_EIL 2.71828182845904
+#define S21_EPS_6 1e-6
+#define S21_EPS_10 1e-10
+#define S21_EPS_17 1e-17
+#define S21_NAN 0.0 / 0.0
+#define S21_INF 1.0 / 0.0
+#define S21_LN_2 0.69314718056
 
 long double s21_pow(double x, double y);
 long double s21_sqrt(double x);
