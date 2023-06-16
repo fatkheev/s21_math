@@ -1,14 +1,38 @@
 #include "s21_math.h"
 
+// int main() {
+//   double x;
+//   printf("Введите число: ");
+//   scanf("%lf", &x);
+//   printf("%Lf\n", s21_cos(x));
+//   printf("%f", cos(x));
+//   return 0;
+// }
+
+// int main() {
+//   double x, y;
+//   printf("Введите число: ");
+//   scanf("%lf %lf", &x, &y);
+//   printf("%Lf\n", s21_pow(x, y));
+//   printf("%f", pow(x, y));
+//   return 0;
+// }
+
 int S21_ISNAN(double x) { return x != x; }
 
 long double s21_pow(double base, double exp) {
-  double res;
+  double res = 0;
   // x^y = exp(y * ln(x))
-  if ((base == 0 && exp == 0) || (base == 1 && exp == 0)) {
+  if (exp == 0) {
     res = 1;
+  } else if (base == 0) {
+    res = 0;
   } else if (base == 0 && exp == 1) {
     res = 0;
+  } else if (exp == S21_INF) {
+    res = 1;
+  } else if (exp != exp) {
+    res = 1;
   } else {
     if (exp >= 0) {
       res = s21_exp(exp * s21_log(base));
@@ -21,7 +45,7 @@ long double s21_pow(double base, double exp) {
 }
 
 long double s21_sqrt(double x) {
-  // res = (res + x / res) / 2 метод Ньютона 
+  // res = (res + x / res) / 2 метод Ньютона
   double res = x;
 
   if (x < 0) {
@@ -140,8 +164,7 @@ long double s21_atan(double x) {
     res = S21_ATAN_1;
   } else if (x == -1) {
     res = -S21_ATAN_1;
-  }
- else if (x == S21_INF) {
+  } else if (x == S21_INF) {
     res = S21_PI / 2;
   } else {
     if (x > 1) {
@@ -166,7 +189,7 @@ long double s21_atan(double x) {
 }
 
 long double s21_asin(double x) {
-  //asin(x) = atan(x / sqrt(1 - x^2))
+  // asin(x) = atan(x / sqrt(1 - x^2))
   long double res;
   if (x == 0) {
     res = 0;
@@ -203,13 +226,18 @@ long double s21_acos(double x) {
 long double s21_ceil(double x) {
   int ceil_digit = (int)x;
   double res = 0;
-  if ((double)ceil_digit == x) {
-    res = x;
-  } else if (x > 0) {
-    res = (double)ceil_digit + 1;
+  if (x != x) {
+    res = S21_NAN;
   } else {
-    res = (double)ceil_digit;
+    if ((double)ceil_digit == x) {
+      res = x;
+    } else if (x > 0) {
+      res = (double)ceil_digit + 1;
+    } else {
+      res = (double)ceil_digit;
+    }
   }
+
   return res;
 }
 
@@ -219,7 +247,7 @@ long double s21_floor(double x) {
     res = x;
   } else {
     int ceil_digit = (int)x;
-    if (x < 0) {
+    if (x < 0 && (x - ceil_digit) != 0) {
       res = (double)ceil_digit - 1;
     } else if (x == S21_INF) {
       res = S21_INF;
