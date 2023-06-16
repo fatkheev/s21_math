@@ -21,6 +21,7 @@ long double s21_pow(double base, double exp) {
 }
 
 long double s21_sqrt(double x) {
+  // res = (res + x / res) / 2 метод Ньютона 
   double res = x;
 
   if (x < 0) {
@@ -91,6 +92,7 @@ long double s21_sin(double x) {
 }
 
 long double s21_cos(double x) {
+  // cos(x) = 1 - x^2/2! + x^4/4! - x^6/6! + ...
   double res;
   if (x == 0) {
     res = 1;
@@ -164,6 +166,7 @@ long double s21_atan(double x) {
 }
 
 long double s21_asin(double x) {
+  //asin(x) = atan(x / sqrt(1 - x^2))
   long double res;
   if (x == 0) {
     res = 0;
