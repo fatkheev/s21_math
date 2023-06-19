@@ -1,23 +1,5 @@
 #include "s21_math.h"
 
-// int main() {
-//   double x;
-//   printf("Введите число: ");
-//   scanf("%lf", &x);
-//   printf("%Lf\n", s21_cos(x));
-//   printf("%f", cos(x));
-//   return 0;
-// }
-
-// int main() {
-//   double x, y;
-//   printf("Введите число: ");
-//   scanf("%lf %lf", &x, &y);
-//   printf("%Lf\n", s21_pow(x, y));
-//   printf("%f", pow(x, y));
-//   return 0;
-// }
-
 int S21_ISNAN(double x) { return x != x; }
 
 long double s21_pow(double base, double exp) {

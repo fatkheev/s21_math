@@ -1,6 +1,4 @@
 #include <check.h>
-#include <math.h>
-#include <stdlib.h>
 
 #include "s21_math.h"
 
@@ -79,7 +77,7 @@ START_TEST(fmod_test) {
   ck_assert_float_eq_tol(fmod(12.67536, 2.5), s21_fmod(12.67536, 2.5),
                          S21_EPS_6);
   ck_assert_double_nan(s21_fmod(12.67536, 0));
-                         ck_assert_float_eq_tol(fmod(12.67536, -2.5), s21_fmod(12.67536, -2.5),
+  ck_assert_float_eq_tol(fmod(12.67536, -2.5), s21_fmod(12.67536, -2.5),
                          S21_EPS_6);
   ck_assert_float_eq_tol(fmod(-1234.546373, 3.5), s21_fmod(-1234.546373, 3.5),
                          S21_EPS_6);

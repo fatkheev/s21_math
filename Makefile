@@ -19,7 +19,7 @@ test: clean s21_test.c s21_math.a
 	gcc s21_test.o -L /opt/homebrew/Cellar/check/0.15.2/lib -lcheck -L. s21_math.a -o test
 	./test
 
-html: test
+gcov_report: test
 	gcc -fprofile-arcs -ftest-coverage -o s21_test s21_math.c s21_test.c -I/opt/homebrew/Cellar/check/0.15.2/include -L/opt/homebrew/Cellar/check/0.15.2/lib -lcheck -lm -lpthread
 	./s21_test
 	lcov --capture --directory . --output-file coverage.info
