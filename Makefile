@@ -1,13 +1,6 @@
 GCC=gcc -Wall -Werror -Wextra
 
-
-all: s21_math
-
-s21_math: s21_math.o
-	$(GCC) s21_math.o -o s21_math
-
-s21_math.o: s21_math.c
-	$(GCC) -c s21_math.c -o s21_math.o
+all: test gcov_report
 
 s21_math.a : s21_math.c
 	$(GCC) -c s21_math.c 
@@ -26,11 +19,6 @@ gcov_report: test
 	lcov --remove coverage.info '/usr/*' --output-file coverage.info
 	genhtml coverage.info --output-directory out
 	open out/index.html
-
-valgrind: 
-	CK_FORK=no valgrind --trace-children=yes --track-fds=yes --track-origins=yes --leak-check=full --show-leak-kinds=all --verbose --log-file=RESULT.txt ./s21_math -i test1.txt
-	cat RESULT.txt
-	rm -rf RESULT.txt
 
 rebuild: clean all
 

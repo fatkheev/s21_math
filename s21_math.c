@@ -2,24 +2,24 @@
 
 int S21_ISNAN(double x) { return x != x; }
 
-long double s21_pow(double base, double exp) {
+long double s21_pow(double base, double exp1) {
   double res = 0;
   // x^y = exp(y * ln(x))
-  if (exp == 0) {
+  if (exp1 == 0) {
     res = 1;
   } else if (base == 0) {
     res = 0;
-  } else if (base == 0 && exp == 1) {
+  } else if (base == 0 && exp1 == 1) {
     res = 0;
-  } else if (exp == S21_INF) {
+  } else if (exp1 == S21_INF) {
     res = 1;
-  } else if (exp != exp) {
+  } else if (exp1 != exp1) {
     res = 1;
   } else {
-    if (exp >= 0) {
-      res = s21_exp(exp * s21_log(base));
+    if (exp1 >= 0) {
+      res = s21_exp(exp1 * s21_log(base));
     } else {
-      res = 1.0 / s21_exp(-exp * s21_log(base));
+      res = 1.0 / s21_exp(-exp1 * s21_log(base));
     }
   }
 
@@ -61,7 +61,7 @@ int s21_abs(int x) {
 }
 
 long double s21_fabs(double x) {
-  double res = 0;
+  long double res = 0;
   if (x < 0) {
     res = -x;
   } else {
@@ -76,7 +76,7 @@ long double s21_sin(double x) {
   if (x == 0) {
     res = 0;
   } else if (x == S21_INF) {
-    res = S21_INF;
+    res = S21_NAN;
   } else if (x != x) {
     res = S21_NAN;
   } else {
@@ -103,7 +103,7 @@ long double s21_cos(double x) {
   if (x == 0) {
     res = 1;
   } else if (x == S21_INF) {
-    res = S21_INF;
+    res = S21_NAN;
   } else if (x != x) {
     res = S21_NAN;
   } else {
@@ -118,7 +118,7 @@ long double s21_cos(double x) {
     x = x - 2 * S21_PI *
                 s21_floor(x / (2 * S21_PI));  // приводим число к одному периоду
 
-    for (int i = 1; i <= 100; i++) {
+    for (int i = 1; i <= 50; i++) {
       st = st + 2;
       add = (s21_pow(x, st)) / s21_fact(st);
       sign = -sign;
@@ -133,6 +133,8 @@ long double s21_tan(double x) {
   double res = 0;
   if (x == S21_INF || x != x) {
     res = S21_NAN;
+  } else if (x == 0) {
+    res = 0;
   } else {
     res = s21_sin(x) / s21_cos(x);
   }
@@ -205,6 +207,42 @@ long double s21_acos(double x) {
   return res;
 }
 
+long double s21_exp(double x) {
+  long double dev = 1, res = 1;
+  int flag = 0;
+
+  if (x == -S21_INF) {
+    return 0;
+  } else if (x == S21_INF) {
+    return S21_INF;
+  } else {
+    if (x < 0) {
+      x *= -1;
+      flag = 1;
+    }
+    for (long double i = 1; s21_fabs(dev) > S21_EPS_25; i++) {
+      dev *= x / i;
+      res += dev;
+      if (res > MAX_DOUBLE) {
+        res = S21_INF;
+        break;
+      }
+    }
+    if (flag == 1) {
+      if (res > MAX_DOUBLE) {
+        res = 0;
+      } else {
+        res = 1. / res;
+      }
+    }
+
+    if (res > MAX_DOUBLE) {
+      res = S21_INF;
+    }
+  }
+  return res;
+}
+
 long double s21_ceil(double x) {
   int ceil_digit = (int)x;
   double res = 0;
@@ -241,56 +279,37 @@ long double s21_floor(double x) {
   return res;
 }
 
-long double s21_exp(double x) {
-  // exp(x) = 1 + x/1! + x^2/2! + x^3/3! + x^4/4! + ...
-  if (x < 100) {
-    long double res = 1.0;
-    long double add = 1.0;
-
-    for (int i = 1; i <= 300; i++) {
-      add = add * (x / i);
-      res = res + add;
-    }
-
-    return res;
-  } else {
-    long double tmp = s21_exp(x / 2);
-    return tmp * tmp;
-  }
-}
-
 long double s21_log(double x) {
-  if (x < S21_EPS_17) {
-    return S21_NAN;
-  }
-  double res;
-
-  // для больших чисел используем свойство ln(a*b) = ln(a) + ln(b)
-  if (x > 2) {
-    int count = 0;
-    while (x > 2) {
-      x /= 2;
-      count++;
-    }
-    res = s21_log(x) + count * S21_LN_2;
+  long double res;
+  if (x == S21_INF) {
+    res = x;
+  } else if (x != x || x == -S21_INF || x < 0) {
+    res = S21_NAN;
+  } else if (x == 0) {
+    res = -S21_INF;
+  } else if (x == 1) {
+    res = 0;
   } else {
-    double y = (x - 1) / (x + 1);
-    int st = 1;
-    double add = y;
-    res = y;
-
-    for (int i = 1; i < 5000; i++) {
-      add = y;
-      st = st + 2;
-      for (int j = 1; j < st; j++) {
-        add = add * y;
-      }
-      res = res + add / st;
-      if (s21_fabs(add / st) < S21_EPS_17) {
-        break;
+    long double st = 0, count = 2, temp, result;
+    while (x >= 10 || x < 1) {
+      if (x < 1) {
+        x = x * 10;
+        st--;
+      } else {
+        x = x * 0.1;
+        st++;
       }
     }
-    res = res * 2;
+    x /= 10;
+    x--;
+    result = x;
+    temp = x;
+    while (s21_fabs(result) > S21_EPS_17) {
+      result = result * (-x * (count - 1) / count);
+      temp = temp + result;
+      count = count + 1;
+    }
+    res = temp + (st + 1) * S21_LN10;
   }
   return res;
 }
@@ -305,6 +324,8 @@ long double s21_fmod(double x, double y) {
   } else if (x > 0 && y < 0) {
     y = -y;
     res = s21_fmod(x, y);
+  } else if (x == S21_INF && y == S21_INF) {
+    res = S21_NAN;
   } else if (x == 0 || x == y) {
     res = 0;
   } else if (x != 0 && y == 0) {

@@ -1,4 +1,5 @@
 #include <check.h>
+#include <math.h>
 
 #include "s21_math.h"
 
@@ -20,7 +21,7 @@ START_TEST(sqrt_test) {
 END_TEST
 
 START_TEST(log_test) {
-  ck_assert_double_eq(s21_log(1.1), log(1.1));
+  ck_assert_double_eq_tol(s21_log(1.1), log(1.1), S21_EPS_6);
   ck_assert_double_eq_tol(s21_log(0.01), log(0.01), S21_EPS_6);
   for (double i = 0.01; i < 2; i = i + 0.01) {
     ck_assert_double_eq_tol(s21_log(i), log(i), S21_EPS_6);
@@ -119,13 +120,13 @@ START_TEST(sin_test) {
   ck_assert_double_eq_tol(s21_sin(-2.3), sin(-2.3), S21_EPS_6);
   ck_assert_double_eq_tol(s21_sin(0), sin(0), S21_EPS_6);
   ck_assert_double_eq_tol(s21_sin(-0), sin(-0), S21_EPS_6);
-  ck_assert_double_infinite(s21_sin(S21_INF));
+  ck_assert_double_nan(s21_sin(S21_INF));
   ck_assert_double_nan(s21_sin(S21_NAN));
 }
 END_TEST
 
 START_TEST(cos_test) {
-  ck_assert_double_infinite(s21_cos(S21_INF));
+  ck_assert_double_nan(s21_cos(S21_INF));
   ck_assert_double_nan(s21_cos(S21_NAN));
   ck_assert_double_eq_tol(s21_cos(0.8), cos(0.8), S21_EPS_6);
   ck_assert_double_eq_tol(s21_cos(-0.8), cos(-0.8), S21_EPS_6);
@@ -136,8 +137,9 @@ START_TEST(cos_test) {
 END_TEST
 
 START_TEST(tan_test) {
+  // ck_assert_double_eq_tol(s21_tan(S21_INF), tan(S21_INF), S21_EPS_6);
   ck_assert_double_nan(s21_tan(S21_NAN));
-  ck_assert_double_nan(s21_tan(S21_NAN));
+  ck_assert_double_nan(s21_tan(S21_INF));
   ck_assert_double_eq_tol(s21_tan(0.5), tan(0.5), S21_EPS_6);
   ck_assert_double_eq_tol(s21_tan(-0.5), tan(-0.5), S21_EPS_6);
   ck_assert_double_eq_tol(s21_tan(1.5), tan(1.5), S21_EPS_6);
